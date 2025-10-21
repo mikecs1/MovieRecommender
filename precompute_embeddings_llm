@@ -1,0 +1,43 @@
+import pandas as pd
+import numpy as np
+import requests
+from concurrent.futures import ThreadPoolExecutor, as_completed
+from tqdm import tqdm
+
+# Load TMDB data
+df = pd.read_csv("tmdb_5000_movies.csv")
+df["release_date"] = df["release_date"].fillna("Unknown")
+
+def create_textual_representation(row):
+    return f"Title: {row['title']}\nDescription: {row['overview']}\nYear: {str(row['release_date'])[:4]}"
+
+df["textual_representation"] = df.apply(create_textual_representation, axis=1)
+
+# Helper function to get embedding
+def get_embedding(text):
+    try:
+        res = requests.post(
+            "http://localhost:11434/api/embeddings",
+            json={"model": "all-minilm:l6", "prompt": text},
+            timeout=30  # optional timeout
+        )
+        return res.json()["embedding"]
+    except Exception as e:
+        print(f"Error embedding: {text[:30]}... -> {e}")
+        return [0.0]*384  # fallback if failed
+
+# Use ThreadPoolExecutor to parallelize
+embeddings = []
+max_workers = 6  # adjust based on your CPU / local server
+print("Generating embeddings with multithreading...")
+
+with ThreadPoolExecutor(max_workers=max_workers) as executor:
+    futures = {executor.submit(get_embedding, text): i for i, text in enumerate(df["textual_representation"])}
+    
+    for future in tqdm(as_completed(futures), total=len(futures)):
+        embeddings.append(future.result())
+
+# Convert to numpy array
+embeddings = np.array(embeddings, dtype="float32")
+np.save("tmdb_embeddings.npy", embeddings)
+print("✅ Embeddings generated and saved to tmdb_embeddings.npy")
