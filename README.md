@@ -53,18 +53,6 @@ pip install -r requirements-dev.txt
 - Hybrid
   - Weighted/blended scores from multiple models
 
-## Evaluation
-
-- Split strategies: random split, time-based split, leave-one-out
-- Metrics: Precision@K, Recall@K, MAP, NDCG
-- Example:
-```bash
-python -m movierecommender.cli evaluate \
-  --ratings data/movielens/ml-100k/ratings.csv \
-  --algorithm item_based_cf \
-  --top-k 10
-```
-
 ## License
 
 This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
