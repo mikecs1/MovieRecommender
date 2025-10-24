@@ -1,6 +1,8 @@
 # MovieRecommender
 
 A Python-based movie recommendation system that helps users discover new films based on their preferences and viewing history.
+GUI made using streamlit : https://movierecommender23.streamlit.app/
+
 
 ## Overview
 
