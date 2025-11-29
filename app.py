@@ -52,7 +52,7 @@ def get_poster(title):
                 return f"https://image.tmdb.org/t/p/w500{poster_path}"
         return None
     except Exception as e:
-        st.write(f"⚠️ Error fetching poster for {title}: {e}")
+        st.write(f"Error fetching poster for {title}: {e}")
         return None
 
 
