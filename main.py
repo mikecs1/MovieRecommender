@@ -3,7 +3,6 @@ import numpy as np
 import faiss
 import requests
 from concurrent.futures import ThreadPoolExecutor
-from tqdm import tqdm  # for better progress bar
 
 # Load TMDB data
 df = pd.read_csv("tmdb_5000_movies.csv")
