@@ -40,4 +40,3 @@ with ThreadPoolExecutor(max_workers=max_workers) as executor:
 # Convert to numpy array
 embeddings = np.array(embeddings, dtype="float32")
 np.save("tmdb_embeddings.npy", embeddings)
-print("✅ Embeddings generated and saved to tmdb_embeddings.npy")
